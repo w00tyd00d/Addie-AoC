@@ -5,7 +5,6 @@ import os
 
 from aoc_scraper import Scraper
 from discord.ext import tasks
-from keep_alive import keep_alive
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -70,5 +69,4 @@ async def send_message(channel, message):
 
 
 if __name__ == "__main__":
-    keep_alive()
     client.run(os.environ['DISCORD_TOKEN'])
