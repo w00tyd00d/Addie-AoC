@@ -2,7 +2,7 @@
     "discord_token": "DISCORD_TOKEN",
     "guild_id": 172029900901974016,
     "aoc_channel_id": 1279823725495062589,
-    "debug_mode": true,
-    "debug_user_id": 172034302253596672,
+    "debug_mode": false,
+    "debug_user_id": 12345,
     "debug_guild_id": 556843112962457601
 }
