@@ -11,8 +11,10 @@ class Scraper:
         self.year = str(year)
         self.cache = Cache(f'{self.year}')
 
-    def get_day(self, day) -> list:
-        if day not in self.cache.data:
+    def get_puzzle(self, day, force_scrape = False) -> list:
+        day = str(day)
+        
+        if day not in self.cache.data or force_scrape:
             self.cache.set(day, self._scrape(day))
             self.cache.save_data()
 
@@ -38,18 +40,17 @@ class Scraper:
         msg = ""
         tmp = ""
         for child in element.children:
-            match child.name:
-                case "h2":
-                    tmp += f'**{child.text}**\n\n'
-                case "pre":
-                    tmp += f'```\n{child.text}```\n'
-                case "p":
-                    tmp += f'{self._format_text(child)}\n\n'
-                case "ul":
-                    for grandchild in child.find_all("li"):
-                        tmp += f'- {self._format_text(grandchild)}'
-                        tmp += "\n"
+            if child.name == "h2":
+                tmp += f'**{child.text}**\n\n'
+            elif child.name == "pre":
+                tmp += f'```\n{child.text}```\n'
+            elif child.name == "p":
+                tmp += f'{self._format_text(child)}\n\n'
+            elif child.name == "ul":
+                for grandchild in child.find_all("li"):
+                    tmp += f'- {self._format_text(grandchild)}'
                     tmp += "\n"
+                tmp += "\n"
 
             if len(tmp) + len(msg) > 2000:
                 res.append(msg)
@@ -64,15 +65,14 @@ class Scraper:
     def _format_text(self, element):
         res = ""
         for child in element.children:
-            match child.name:
-                case "a":
-                    res += self._link_embed(child)
-                case "em":
-                    res += f'**{child.text}**'
-                case "code":
-                    res += f'`{child.text}`'
-                case _:
-                    res += child.text
+            if child.name == "a":
+                res += self._link_embed(child)
+            elif child.name == "em":
+                res += f'**{child.text}**'
+            elif child.name == "code":
+                res += f'`{child.text}`'
+            else:
+                res += child.text
 
         return res
 

@@ -19,7 +19,7 @@ class Cache:
 
     def save_data(self):
         with open(self.file, "w") as f:
-            f.write(json.dumps(self.data))
+            f.write(json.dumps(self.data, indent=4))
 
     def _load_data(self):
         if Path(self.file).is_file():
